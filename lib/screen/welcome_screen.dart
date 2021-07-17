@@ -1,6 +1,8 @@
+import 'package:flashchat/components/buttomWidget.dart';
 import 'package:flashchat/screen/login_screen.dart';
 import 'package:flashchat/screen/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String id = 'welcome';
@@ -16,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   void initState() {
     controller = AnimationController(
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 3),
       vsync: this,
       // upperBound: 100.0, since Curved Animation cannot exceed 1. Its range is 0 to 1.
     );
@@ -30,13 +32,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     //       controller!.forward();
     //     }
     // });
-    animation = ColorTween(begin: Colors.lightBlueAccent, end: Colors.cyanAccent)
-        .animate(controller!);
+    animation =
+        ColorTween(begin: Colors.lightBlueAccent, end: Colors.cyanAccent)
+            .animate(controller!);
     controller!.forward();
     controller!.addListener(() {
       setState(() {
         // print(controller!.value);
-        print(animation!.value);
+        // print(animation!.value);
       });
     });
     super.initState();
@@ -68,61 +71,42 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     height: 60.0,
                   ),
                 ),
-                Text(
-                  // '${controller!.value.toInt()}%', for the loading screen shown in percentages
-                  'Flash Chat',
-                  style: TextStyle(
-                    fontSize: 45.0,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.blueGrey,
-                  ),
+                AnimatedTextKit(
+                  repeatForever: false,
+                  animatedTexts: [
+                    FlickerAnimatedText(
+                      'FlashChat',
+                      textStyle: TextStyle(
+                        fontSize: 45.0,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.blueGrey,
+                      ),
+                    ),
+                  ],
                 ),
+
+                // '${controller!.value.toInt()}%', for the loading screen shown in percentages
               ],
             ),
             SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to login screen.
-                    Navigator.pushNamed(context, LoginScreen.id);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Log In',
-                  ),
-                ),
-              ),
+            ButtonWidget(
+              Colors.lightBlueAccent,
+              () {
+                Navigator.pushNamed(context, LoginScreen.id);
+              },
+              'Login',
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to registration screen.
-                    Navigator.pushNamed(context, RegistrationScreen.id);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Register',
-                  ),
-                ),
-              ),
-            ),
+            ButtonWidget(
+              Colors.blueAccent, 
+              () { Navigator.pushNamed(context, RegistrationScreen.id);}, 
+              'Register'),
           ],
         ),
       ),
     );
   }
 }
+
+
