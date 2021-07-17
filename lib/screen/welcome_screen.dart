@@ -8,11 +8,51 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  AnimationController? controller;
+  Animation? animation;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+      // upperBound: 100.0, since Curved Animation cannot exceed 1. Its range is 0 to 1.
+    );
+    // animation = CurvedAnimation(parent: controller!, curve: Curves.easeInCirc);
+    // controller!.forward();
+    // animation!.addStatusListener((status) {
+
+    //     if (status == AnimationStatus.completed) {
+    //       controller!.reverse(from: 1.0);
+    //     } else if (status == AnimationStatus.dismissed) {
+    //       controller!.forward();
+    //     }
+    // });
+    animation = ColorTween(begin: Colors.lightBlueAccent, end: Colors.cyanAccent)
+        .animate(controller!);
+    controller!.forward();
+    controller!.addListener(() {
+      setState(() {
+        // print(controller!.value);
+        print(animation!.value);
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller!.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: animation!.value,
+      // Colors.red.withOpacity(controller!.value),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -22,13 +62,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Row(
               children: <Widget>[
                 Hero(
-                  tag:'logo',
+                  tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
                     height: 60.0,
                   ),
                 ),
                 Text(
+                  // '${controller!.value.toInt()}%', for the loading screen shown in percentages
                   'Flash Chat',
                   style: TextStyle(
                     fontSize: 45.0,
