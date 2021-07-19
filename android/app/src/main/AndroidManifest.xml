@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flashchat">
+    package="com.powerhouse.flashchat">
    <application
         android:label="flashchat"
         android:icon="@mipmap/ic_launcher">

@@ -1,4 +1,4 @@
-package com.example.flashchat
+package com.powerhouse.flashchat
 
 import io.flutter.embedding.android.FlutterActivity
 
