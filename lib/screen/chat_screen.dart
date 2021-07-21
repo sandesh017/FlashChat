@@ -1,5 +1,8 @@
+import 'package:flashchat/screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flashchat/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_core/firebase_core.dart';
 
 class ChatScreen extends StatefulWidget {
   static String id = 'chat';
@@ -8,6 +11,27 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _auth = FirebaseAuth.instance;
+  //FirebaseUser loggedInUser; firbaseUser is changed into User.
+  User? loggedInUser;
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+        // print(loggedInUser!.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +39,11 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
+              icon: Icon(Icons.logout),
               onPressed: () {
                 //Implement logout functionality
+                _auth.signOut();
+                Navigator.popUntil(context, ModalRoute.withName(WelcomeScreen.id));
               }),
         ],
         title: Text('⚡️Chat'),
